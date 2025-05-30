@@ -2,9 +2,10 @@
 
 Este repositorio contiene dos versiones de un **analizador léxico** diseñado para interpretar instrucciones simples de control de un brazo robótico.
 
-## Estructura del proyecto
+## Estructura del repositorio
 
 - `AnalizadorLexicoRobot/`: Analizador hecho **solo con código Java**, sin librerías externas.
+- `AnalizadorLexicoRobotJFlex/`: Analizador hecho usando **JFLEX** (generador léxico para Java.
 
 ## Ejemplo de entrada
 ```bash
