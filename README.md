@@ -5,7 +5,7 @@ Este repositorio contiene dos versiones de un **analizador léxico** diseñado p
 ## Estructura del repositorio
 
 - `AnalizadorLexicoRobot/`: Analizador hecho **solo con código Java**, sin librerías externas.
-- `AnalizadorLexicoRobotJFlex/`: Analizador hecho usando **JFLEX** (generador léxico para Java.
+- `AnalizadorLexicoRobotJFlex/`: Analizador hecho utilizando **JFLEX** (generador léxico para Java.
 
 ## Ejemplo de entrada
 ```bash
