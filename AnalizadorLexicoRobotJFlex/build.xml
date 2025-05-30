@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="AnalizadorLexicoRobotJFlex" basedir="." default="compilar">
+    
+    <!-- Rutas del proyecto -->
+    <property name="src.dir" value="src"/>
+    <property name="build.dir" value="build/classes"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="dist.dir" value="dist"/>
+    
+    <!-- Inicialización -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+    
+    <!-- Generar Lexer con JFlex -->
+    <target name="generar-lexer">
+        <echo message="== Verificando JFlex JAR =="/>
+        <available file="${lib.dir}/jflex-full-1.9.1.jar" property="jflex.exists"/>
+        <fail unless="jflex.exists" message="JFlex JAR no encontrado en: ${lib.dir}/jflex-full-1.9.1.jar. Crea la carpeta 'lib' y coloca el JAR ahí."/>
+        
+        <echo message="== Generando Lexer.java con JFlex =="/>
+        <java jar="${lib.dir}/jflex-full-1.9.1.jar" fork="true" failonerror="true">
+            <arg value="${src.dir}/lexico/Lexer.flex"/>
+        </java>
+        <echo message="== Lexer generado exitosamente =="/>
+    </target>
+    
+    <!-- Compilar el proyecto -->
+    <target name="compilar" depends="init, generar-lexer">
+        <echo message="== Compilando proyecto =="/>
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+            <classpath>
+                <pathelement path="${lib.dir}/jflex-full-1.9.1.jar"/>
+            </classpath>
+        </javac>
+        <echo message="== Compilación exitosa =="/>
+    </target>
+    
+    <!-- Ejecutar todo el proceso -->
+    <target name="todo" depends="generar-lexer, compilar">
+        <echo message="== Proceso completo finalizado =="/>
+    </target>
+    
+    <!-- Limpiar archivos generados -->
+    <target name="clean">
+        <echo message="== Limpiando archivos generados =="/>
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+        <delete file="${src.dir}/lexico/Lexer.java" quiet="true"/>
+        <echo message="== Limpieza completada =="/>
+    </target>
+    
+    <!-- Empaquetar en JAR (NetBeans ejecuta este target en Clean and Build) -->
+    <target name="jar" depends="init, generar-lexer, compilar">
+        <echo message="== Creando JAR =="/>
+        <jar destfile="${dist.dir}/AnalizadorLexicoRobot.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="lexico.Main"/>
+            </manifest>
+            <zipfileset src="${lib.dir}/jflex-full-1.9.1.jar" excludes="META-INF/*.SF"/>
+        </jar>
+        <echo message="== JAR creado: ${dist.dir}/AnalizadorLexicoRobot.jar =="/>
+    </target>
+    
+    <!-- Ejecutar el programa -->
+    <target name="run" depends="compilar">
+        <echo message="== Ejecutando programa =="/>
+        <java classname="lexico.Main" fork="true">
+            <classpath>
+                <pathelement path="${build.dir}"/>
+                <pathelement path="${lib.dir}/jflex-full-1.9.1.jar"/>
+            </classpath>
+        </java>
+    </target>
+    
+    <!-- Rebuild completo -->
+    <target name="rebuild" depends="clean, todo">
+        <echo message="== Rebuild completo finalizado =="/>
+    </target>
+    
+</project>
